@@ -1,22 +1,29 @@
 import socket
 
 
-def repeat_scan(targets, ports):
-    for ports in range(1, ports + 1):
-        port_scan(targets, ports)
+def repeat_scan(target, ports):
+    print('\n' + 'Starting Scan For ' + str(target))
+    for port in range(1, ports + 1):
+        port_scan(target, port)
 
 
 def port_scan(ipaddress, port):
     try:
         sock = socket.socket()
         sock.connect((ipaddress, port))
-        print(str(port) + ' open')
+        print("[+] Open: " + str(port))
         sock.close()
     except:
-        print(str(port) + ' Closed')
+        pass
 
 
-target = input("Add The Target IP: ")
-ports = input('How Many Ports you want to scan?: ')
+targets = input("[*] Enter Targets To Scan(split them by , If there any): ")
+ports = input(
+    '[*] Enter How Many Ports You Want 19To Scan: ')
 
-repeat_scan(target, int(ports))
+if ',' in targets:
+    print('[*] Scaning Multiple Targets')
+    for ip_addr in targets.split(','):
+        repeat_scan(ip_addr.strip(' '), int(ports))
+else:
+    repeat_scan(targets, int(ports))
