@@ -14,7 +14,7 @@ def check_ping(target):
 
 
 def repeat_scan(target, ports):
-    print('\n' + 'Starting Scan For ' + str(target))
+    print('\n' + 'Target: ' + str(target))
     for port in range(1, ports + 1):
         port_scan(target, port)
 
@@ -23,18 +23,19 @@ def port_scan(ipaddress, port):
     try:
         sock = socket.socket()
         sock.connect((ipaddress, port))
-        print("[+] Open: " + str(port))
+        print("[+] Open: " + str(port) + ' ' +
+              socket.getservbyport(port, 'tcp'))
         sock.close()
     except:
         pass
 
 
 targets = input("[*] Enter Targets To Scan(split them by , If there any): ")
-ports = input(
-    '[*] Enter How Many Ports You Want To Scan: ')
+ports = input('[*] Enter How Many Ports You Want To Scan: ')
 
 if ',' in targets:
     print('[*] Scaning Multiple Targets')
+
     for ip_addr in targets.split(','):
         if check_ping(ip_addr.strip(' ')) == "Network Active":
             repeat_scan(ip_addr.strip(' '), int(ports))
@@ -45,3 +46,6 @@ if ',' in targets:
 elif check_ping(targets) == "Network Active":
     print('[*] Scaning Single Target')
     repeat_scan(targets, int(ports))
+else:
+    print('\n' +
+          "[-] This Target is offline or out of your network: " + targets)
